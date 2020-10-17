@@ -152,6 +152,27 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                   ),
                 ],
               ),
+            )
+          else
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Stack(
+                  children: [
+                    Hero(
+                      tag: Text('data'),
+                      child: Image(
+                        image: AssetImage('assets/icon/apology.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 110.0, left: 5.0),
+                      child: Text('No data, sorry.'),
+                    )
+                  ],
+                ),
+              ),
             ),
         ],
       ),

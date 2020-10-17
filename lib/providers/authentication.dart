@@ -36,6 +36,10 @@ class Authentication with ChangeNotifier {
     }
   }
 
+  void clean() {
+    _user = null;
+  }
+
   Future<void> saveUser(
     String userName,
     String password,
@@ -59,7 +63,7 @@ class Authentication with ChangeNotifier {
   }
 
   Future<void> loguot() async {
-    _user = null;
+    clean();
     _userAuth = false;
     notifyListeners();
   }

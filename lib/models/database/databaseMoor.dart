@@ -41,7 +41,7 @@ class AppDatabase extends _$AppDatabase {
           (FlutterQueryExecutor.inDatabaseFolder(
             path: 'db.sqlite',
             // Good for debugging - prints SQL in the console
-            logStatements: true,
+            // logStatements: true,
           )),
         );
 

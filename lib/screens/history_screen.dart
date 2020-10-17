@@ -27,6 +27,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    userHistory = Provider.of<Currencies>(context, listen: false).userHistory;
     return Scaffold(
       drawer: AppDrawer(),
       appBar: AppBar(
@@ -36,18 +37,47 @@ class _HistoryScreenState extends State<HistoryScreen> {
         builder: (context, historyData, child) {
           return Padding(
             padding: const EdgeInsets.all(8),
-            child: ListView.builder(
-              itemCount: historyData.userHistory.length,
-              shrinkWrap: true,
-              itemBuilder: (_, idx) => Column(
-                children: [
-                  HistoryItem(
-                    historyData.userHistory[idx],
-                  ),
-                  Divider(),
-                ],
-              ),
-            ),
+            child: historyData.userHistory.isNotEmpty
+                ? ListView.builder(
+                    itemCount: historyData.userHistory.length,
+                    shrinkWrap: true,
+                    itemBuilder: (_, idx) => Column(
+                      children: [
+                        HistoryItem(
+                          historyData.userHistory[idx],
+                        ),
+                        Divider(),
+                      ],
+                    ),
+                  )
+                : !historyData.loading
+                    ? Container(
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 50.0),
+                            child: Stack(
+                              children: [
+                                Hero(
+                                  tag: Text('data'),
+                                  child: Image(
+                                    image:
+                                        AssetImage('assets/icon/history.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 110.0, left: 20.0),
+                                  child: Text('No history.'),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: CircularProgressIndicator(),
+                      ),
           );
         },
       ),

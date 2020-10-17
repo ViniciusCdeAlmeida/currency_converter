@@ -13,8 +13,14 @@ class Currencies with ChangeNotifier {
   String _amount;
   List<History> _history = [];
 
+  bool _isLoading = false;
+
   Currency get getCurrencies {
     return _currency;
+  }
+
+  bool get loading {
+    return _isLoading;
   }
 
   List<History> get userHistory {
@@ -50,9 +56,11 @@ class Currencies with ChangeNotifier {
   }
 
   Future<void> _getUserHistory(int userId) async {
+    _isLoading = true;
+    notifyListeners();
     try {
       _history = helperUserHistory(await db.historyDao.getUserHisory(userId));
-
+      _isLoading = false;
       notifyListeners();
     } catch (e) {}
   }
@@ -69,6 +77,12 @@ class Currencies with ChangeNotifier {
     try {
       await db.historyDao.insertHistory(hist);
     } catch (e) {}
+  }
+
+  void clean() {
+    _amount = null;
+    _currency = null;
+    _history = [];
   }
 
   Future<void> getCurrency(String currency) async {
