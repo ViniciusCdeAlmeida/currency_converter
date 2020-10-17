@@ -1,6 +1,7 @@
 import 'package:currency_converter/models/database/databaseMoor.dart';
 import 'package:currency_converter/providers/authentication.dart';
 import 'package:currency_converter/providers/currencies.dart';
+import 'package:currency_converter/screens/converter_screen.dart';
 import 'package:currency_converter/screens/currency_screen.dart';
 import 'package:currency_converter/screens/login_screen.dart';
 import 'package:currency_converter/screens/signup_screen.dart';
@@ -36,11 +37,13 @@ class CurrencyConverter extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           initialRoute: '/',
-          home: authData.isAuth ? CurrencyScreen() : LoginScreen(),
+          // home: authData.isAuth ? CurrencyScreen() : LoginScreen(),
+          home: authData.isAuth ? ConverterScreen() : LoginScreen(),
           routes: {
             CurrencyScreen.routeName: (ctx) => CurrencyScreen(),
             LoginScreen.routeName: (ctx) => LoginScreen(),
             SignupScreen.routeName: (ctx) => SignupScreen(),
+            ConverterScreen.routeName: (ctx) => ConverterScreen(),
           },
         ),
       ),
