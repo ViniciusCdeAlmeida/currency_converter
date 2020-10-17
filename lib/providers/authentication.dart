@@ -7,6 +7,7 @@ import 'dart:async';
 class Authentication with ChangeNotifier {
   bool _userAuth = false;
   User _user;
+  bool _failed = false;
 
   bool get isAuth {
     return _userAuth;
@@ -14,6 +15,15 @@ class Authentication with ChangeNotifier {
 
   User get actualUser {
     return _user;
+  }
+
+  bool get loginFail {
+    return _failed;
+  }
+
+  _setFailed() {
+    _failed = true;
+    notifyListeners();
   }
 
   Future<void> _saveUser(User user) async {
@@ -28,9 +38,13 @@ class Authentication with ChangeNotifier {
 
     try {
       _user = helperUser(await db.userDao.getUser(user));
-    } catch (e) {}
+      _failed = false;
+    } on NoSuchMethodError {
+      _setFailed();
+    }
 
     if (_user != null) {
+      _failed = false;
       _userAuth = true;
       notifyListeners();
     }

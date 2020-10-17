@@ -1,13 +1,13 @@
 import 'package:currency_converter/custom/customLine.dart';
-import 'package:currency_converter/main.dart';
 import 'package:currency_converter/providers/authentication.dart';
 import 'package:currency_converter/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:moor_db_viewer/moor_db_viewer.dart';
 import 'package:provider/provider.dart';
 
 class LoginItem extends StatefulWidget {
-  LoginItem({Key key}) : super(key: key);
+  final bool auth;
+
+  LoginItem(this.auth);
 
   @override
   _LoginItemState createState() => _LoginItemState();
@@ -23,33 +23,18 @@ class _LoginItemState extends State<LoginItem> {
   final _passwordController = TextEditingController();
 
   Future<void> _submit() async {
+    var _auth = Provider.of<Authentication>(context, listen: false);
     if (!_formKey.currentState.validate()) {
       return;
     }
     _formKey.currentState.save();
 
     try {
-      await Provider.of<Authentication>(context, listen: false).getUser(
+      await _auth.getUser(
         _loginData['userName'],
         _loginData['password'],
       );
-    } catch (error) {
-      await showDialog<Null>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Error.'),
-          content: const Text('Error.'),
-          actions: <Widget>[
-            FlatButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: Text('OK'),
-            )
-          ],
-        ),
-      );
-    }
+    } catch (e) {}
   }
 
   @override
@@ -73,6 +58,10 @@ class _LoginItemState extends State<LoginItem> {
                 decoration: InputDecoration(
                   labelText: 'Username or Email',
                 ),
+                validator: (val) {
+                  if (val.isEmpty) return 'Field empty.';
+                  return null;
+                },
                 onSaved: (user) {
                   _loginData['userName'] = user;
                 },
@@ -81,6 +70,10 @@ class _LoginItemState extends State<LoginItem> {
                 decoration: InputDecoration(labelText: 'Password'),
                 obscureText: true,
                 controller: _passwordController,
+                validator: (val) {
+                  if (val.isEmpty) return 'Field empty.';
+                  return null;
+                },
                 onSaved: (pass) {
                   _loginData['password'] = pass;
                 },
@@ -117,8 +110,6 @@ class _LoginItemState extends State<LoginItem> {
                   text: "LOGIN WITH FACEBOOK",
                   icon: Icons.place,
                   color: Color(0xFF3C4858),
-                  func: _dbScreen,
-                  context: context,
                 ),
               ),
               Padding(
@@ -166,11 +157,6 @@ void _signupScreen(BuildContext context) {
   Navigator.of(context).pushNamed(
     SignupScreen.routeName,
   );
-}
-
-void _dbScreen(BuildContext context) {
-  Navigator.of(context)
-      .push(MaterialPageRoute(builder: (context) => MoorDbViewer(db)));
 }
 
 Widget loading() {

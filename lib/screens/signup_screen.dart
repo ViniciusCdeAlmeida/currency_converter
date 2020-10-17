@@ -21,13 +21,9 @@ class _SignupScreenState extends State<SignupScreen> {
 
   final _passwordController = TextEditingController();
 
-  final _passwordConfirmationController = TextEditingController();
+  final _userController = TextEditingController();
 
-  @override
-  void didChangeDependencies() {
-    // Provider.of<Currencies>(context).getCurrency();
-    super.didChangeDependencies();
-  }
+  final _passwordConfirmationController = TextEditingController();
 
   Future<void> _submit() async {
     if (!_signinKey.currentState.validate()) {
@@ -85,6 +81,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(
                     labelText: 'Username or Email',
                   ),
+                  controller: _userController,
+                  validator: (val) {
+                    if (val.isEmpty) return 'Field empty';
+                    return null;
+                  },
                   onSaved: (user) {
                     _signupData['userName'] = user;
                   },
@@ -93,6 +94,10 @@ class _SignupScreenState extends State<SignupScreen> {
                   decoration: InputDecoration(labelText: 'Password'),
                   obscureText: true,
                   controller: _passwordController,
+                  validator: (val) {
+                    if (val.isEmpty) return 'Field empty.';
+                    return null;
+                  },
                   onSaved: (pass) {
                     _signupData['password'] = pass;
                   },
@@ -102,6 +107,11 @@ class _SignupScreenState extends State<SignupScreen> {
                       InputDecoration(labelText: 'Password Confirmation'),
                   obscureText: true,
                   controller: _passwordConfirmationController,
+                  validator: (val) {
+                    if (val != _passwordController.text)
+                      return 'Password not match.';
+                    return null;
+                  },
                   onSaved: (passConfirmation) {
                     _signupData['passwordConfirmation'] = passConfirmation;
                   },

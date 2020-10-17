@@ -13,9 +13,6 @@ class HistoryDao extends DatabaseAccessor<AppDatabase> with _$HistoryDaoMixin {
   Future<List<HistoryDBData>> getUserHisory(int userId) =>
       (select(db.historyDB)..where((tbl) => tbl.userID.equals(userId))).get();
 
-  // Future<LevantamentoDBData> getVerificaLevantamentos() =>
-  //     (select(db.levantamentoDB)..limit(1)).getSingle();
-
   Future<void> insertHistory(History history) async {
     into(historyDB).insert(
       HistoryDBCompanion(

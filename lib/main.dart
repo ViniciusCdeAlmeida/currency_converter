@@ -16,7 +16,6 @@ void main() {
 }
 
 class CurrencyConverter extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -37,7 +36,6 @@ class CurrencyConverter extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           initialRoute: '/',
-          // home: authData.isAuth ? CurrencyScreen() : LoginScreen(),
           home: authData.isAuth ? ConverterScreen() : LoginScreen(),
           routes: {
             CurrencyScreen.routeName: (ctx) => CurrencyScreen(),
