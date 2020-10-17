@@ -243,313 +243,41 @@ class $UserDBTable extends UserDB with TableInfo<$UserDBTable, UserDBData> {
   }
 }
 
-class RatesDBData extends DataClass implements Insertable<RatesDBData> {
-  final int id;
-  final String country;
-  final double rate;
-  final int currency;
-  RatesDBData(
-      {@required this.id,
-      @required this.country,
-      @required this.rate,
-      @required this.currency});
-  factory RatesDBData.fromData(Map<String, dynamic> data, GeneratedDatabase db,
-      {String prefix}) {
-    final effectivePrefix = prefix ?? '';
-    final intType = db.typeSystem.forDartType<int>();
-    final stringType = db.typeSystem.forDartType<String>();
-    final doubleType = db.typeSystem.forDartType<double>();
-    return RatesDBData(
-      id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
-      country:
-          stringType.mapFromDatabaseResponse(data['${effectivePrefix}country']),
-      rate: doubleType.mapFromDatabaseResponse(data['${effectivePrefix}rate']),
-      currency:
-          intType.mapFromDatabaseResponse(data['${effectivePrefix}currency']),
-    );
-  }
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (!nullToAbsent || id != null) {
-      map['id'] = Variable<int>(id);
-    }
-    if (!nullToAbsent || country != null) {
-      map['country'] = Variable<String>(country);
-    }
-    if (!nullToAbsent || rate != null) {
-      map['rate'] = Variable<double>(rate);
-    }
-    if (!nullToAbsent || currency != null) {
-      map['currency'] = Variable<int>(currency);
-    }
-    return map;
-  }
-
-  RatesDBCompanion toCompanion(bool nullToAbsent) {
-    return RatesDBCompanion(
-      id: id == null && nullToAbsent ? const Value.absent() : Value(id),
-      country: country == null && nullToAbsent
-          ? const Value.absent()
-          : Value(country),
-      rate: rate == null && nullToAbsent ? const Value.absent() : Value(rate),
-      currency: currency == null && nullToAbsent
-          ? const Value.absent()
-          : Value(currency),
-    );
-  }
-
-  factory RatesDBData.fromJson(Map<String, dynamic> json,
-      {ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return RatesDBData(
-      id: serializer.fromJson<int>(json['id']),
-      country: serializer.fromJson<String>(json['country']),
-      rate: serializer.fromJson<double>(json['rate']),
-      currency: serializer.fromJson<int>(json['currency']),
-    );
-  }
-  @override
-  Map<String, dynamic> toJson({ValueSerializer serializer}) {
-    serializer ??= moorRuntimeOptions.defaultSerializer;
-    return <String, dynamic>{
-      'id': serializer.toJson<int>(id),
-      'country': serializer.toJson<String>(country),
-      'rate': serializer.toJson<double>(rate),
-      'currency': serializer.toJson<int>(currency),
-    };
-  }
-
-  RatesDBData copyWith({int id, String country, double rate, int currency}) =>
-      RatesDBData(
-        id: id ?? this.id,
-        country: country ?? this.country,
-        rate: rate ?? this.rate,
-        currency: currency ?? this.currency,
-      );
-  @override
-  String toString() {
-    return (StringBuffer('RatesDBData(')
-          ..write('id: $id, ')
-          ..write('country: $country, ')
-          ..write('rate: $rate, ')
-          ..write('currency: $currency')
-          ..write(')'))
-        .toString();
-  }
-
-  @override
-  int get hashCode => $mrjf($mrjc(id.hashCode,
-      $mrjc(country.hashCode, $mrjc(rate.hashCode, currency.hashCode))));
-  @override
-  bool operator ==(dynamic other) =>
-      identical(this, other) ||
-      (other is RatesDBData &&
-          other.id == this.id &&
-          other.country == this.country &&
-          other.rate == this.rate &&
-          other.currency == this.currency);
-}
-
-class RatesDBCompanion extends UpdateCompanion<RatesDBData> {
-  final Value<int> id;
-  final Value<String> country;
-  final Value<double> rate;
-  final Value<int> currency;
-  const RatesDBCompanion({
-    this.id = const Value.absent(),
-    this.country = const Value.absent(),
-    this.rate = const Value.absent(),
-    this.currency = const Value.absent(),
-  });
-  RatesDBCompanion.insert({
-    this.id = const Value.absent(),
-    @required String country,
-    @required double rate,
-    @required int currency,
-  })  : country = Value(country),
-        rate = Value(rate),
-        currency = Value(currency);
-  static Insertable<RatesDBData> custom({
-    Expression<int> id,
-    Expression<String> country,
-    Expression<double> rate,
-    Expression<int> currency,
-  }) {
-    return RawValuesInsertable({
-      if (id != null) 'id': id,
-      if (country != null) 'country': country,
-      if (rate != null) 'rate': rate,
-      if (currency != null) 'currency': currency,
-    });
-  }
-
-  RatesDBCompanion copyWith(
-      {Value<int> id,
-      Value<String> country,
-      Value<double> rate,
-      Value<int> currency}) {
-    return RatesDBCompanion(
-      id: id ?? this.id,
-      country: country ?? this.country,
-      rate: rate ?? this.rate,
-      currency: currency ?? this.currency,
-    );
-  }
-
-  @override
-  Map<String, Expression> toColumns(bool nullToAbsent) {
-    final map = <String, Expression>{};
-    if (id.present) {
-      map['id'] = Variable<int>(id.value);
-    }
-    if (country.present) {
-      map['country'] = Variable<String>(country.value);
-    }
-    if (rate.present) {
-      map['rate'] = Variable<double>(rate.value);
-    }
-    if (currency.present) {
-      map['currency'] = Variable<int>(currency.value);
-    }
-    return map;
-  }
-
-  @override
-  String toString() {
-    return (StringBuffer('RatesDBCompanion(')
-          ..write('id: $id, ')
-          ..write('country: $country, ')
-          ..write('rate: $rate, ')
-          ..write('currency: $currency')
-          ..write(')'))
-        .toString();
-  }
-}
-
-class $RatesDBTable extends RatesDB with TableInfo<$RatesDBTable, RatesDBData> {
-  final GeneratedDatabase _db;
-  final String _alias;
-  $RatesDBTable(this._db, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  GeneratedIntColumn _id;
-  @override
-  GeneratedIntColumn get id => _id ??= _constructId();
-  GeneratedIntColumn _constructId() {
-    return GeneratedIntColumn('id', $tableName, false,
-        hasAutoIncrement: true, declaredAsPrimaryKey: true);
-  }
-
-  final VerificationMeta _countryMeta = const VerificationMeta('country');
-  GeneratedTextColumn _country;
-  @override
-  GeneratedTextColumn get country => _country ??= _constructCountry();
-  GeneratedTextColumn _constructCountry() {
-    return GeneratedTextColumn(
-      'country',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _rateMeta = const VerificationMeta('rate');
-  GeneratedRealColumn _rate;
-  @override
-  GeneratedRealColumn get rate => _rate ??= _constructRate();
-  GeneratedRealColumn _constructRate() {
-    return GeneratedRealColumn(
-      'rate',
-      $tableName,
-      false,
-    );
-  }
-
-  final VerificationMeta _currencyMeta = const VerificationMeta('currency');
-  GeneratedIntColumn _currency;
-  @override
-  GeneratedIntColumn get currency => _currency ??= _constructCurrency();
-  GeneratedIntColumn _constructCurrency() {
-    return GeneratedIntColumn(
-      'currency',
-      $tableName,
-      false,
-    );
-  }
-
-  @override
-  List<GeneratedColumn> get $columns => [id, country, rate, currency];
-  @override
-  $RatesDBTable get asDslTable => this;
-  @override
-  String get $tableName => _alias ?? 'rates_d_b';
-  @override
-  final String actualTableName = 'rates_d_b';
-  @override
-  VerificationContext validateIntegrity(Insertable<RatesDBData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id'], _idMeta));
-    }
-    if (data.containsKey('country')) {
-      context.handle(_countryMeta,
-          country.isAcceptableOrUnknown(data['country'], _countryMeta));
-    } else if (isInserting) {
-      context.missing(_countryMeta);
-    }
-    if (data.containsKey('rate')) {
-      context.handle(
-          _rateMeta, rate.isAcceptableOrUnknown(data['rate'], _rateMeta));
-    } else if (isInserting) {
-      context.missing(_rateMeta);
-    }
-    if (data.containsKey('currency')) {
-      context.handle(_currencyMeta,
-          currency.isAcceptableOrUnknown(data['currency'], _currencyMeta));
-    } else if (isInserting) {
-      context.missing(_currencyMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  RatesDBData map(Map<String, dynamic> data, {String tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return RatesDBData.fromData(data, _db, prefix: effectivePrefix);
-  }
-
-  @override
-  $RatesDBTable createAlias(String alias) {
-    return $RatesDBTable(_db, alias);
-  }
-}
-
-class CurrencyDBData extends DataClass implements Insertable<CurrencyDBData> {
+class HistoryDBData extends DataClass implements Insertable<HistoryDBData> {
   final int id;
   final String base;
-  final DateTime date;
-  final int user;
-  CurrencyDBData(
+  final DateTime savedDate;
+  final String currencyDate;
+  final List<Rate> rates;
+  final int amount;
+  final int userID;
+  HistoryDBData(
       {@required this.id,
       @required this.base,
-      @required this.date,
-      @required this.user});
-  factory CurrencyDBData.fromData(
+      @required this.savedDate,
+      @required this.currencyDate,
+      this.rates,
+      @required this.amount,
+      @required this.userID});
+  factory HistoryDBData.fromData(
       Map<String, dynamic> data, GeneratedDatabase db,
       {String prefix}) {
     final effectivePrefix = prefix ?? '';
     final intType = db.typeSystem.forDartType<int>();
     final stringType = db.typeSystem.forDartType<String>();
     final dateTimeType = db.typeSystem.forDartType<DateTime>();
-    return CurrencyDBData(
+    return HistoryDBData(
       id: intType.mapFromDatabaseResponse(data['${effectivePrefix}id']),
       base: stringType.mapFromDatabaseResponse(data['${effectivePrefix}base']),
-      date:
-          dateTimeType.mapFromDatabaseResponse(data['${effectivePrefix}date']),
-      user: intType.mapFromDatabaseResponse(data['${effectivePrefix}user']),
+      savedDate: dateTimeType
+          .mapFromDatabaseResponse(data['${effectivePrefix}saved_date']),
+      currencyDate: stringType
+          .mapFromDatabaseResponse(data['${effectivePrefix}currency_date']),
+      rates: $HistoryDBTable.$converter0.mapToDart(
+          stringType.mapFromDatabaseResponse(data['${effectivePrefix}rates'])),
+      amount: intType.mapFromDatabaseResponse(data['${effectivePrefix}amount']),
+      userID:
+          intType.mapFromDatabaseResponse(data['${effectivePrefix}user_i_d']),
     );
   }
   @override
@@ -561,32 +289,55 @@ class CurrencyDBData extends DataClass implements Insertable<CurrencyDBData> {
     if (!nullToAbsent || base != null) {
       map['base'] = Variable<String>(base);
     }
-    if (!nullToAbsent || date != null) {
-      map['date'] = Variable<DateTime>(date);
+    if (!nullToAbsent || savedDate != null) {
+      map['saved_date'] = Variable<DateTime>(savedDate);
     }
-    if (!nullToAbsent || user != null) {
-      map['user'] = Variable<int>(user);
+    if (!nullToAbsent || currencyDate != null) {
+      map['currency_date'] = Variable<String>(currencyDate);
+    }
+    if (!nullToAbsent || rates != null) {
+      final converter = $HistoryDBTable.$converter0;
+      map['rates'] = Variable<String>(converter.mapToSql(rates));
+    }
+    if (!nullToAbsent || amount != null) {
+      map['amount'] = Variable<int>(amount);
+    }
+    if (!nullToAbsent || userID != null) {
+      map['user_i_d'] = Variable<int>(userID);
     }
     return map;
   }
 
-  CurrencyDBCompanion toCompanion(bool nullToAbsent) {
-    return CurrencyDBCompanion(
+  HistoryDBCompanion toCompanion(bool nullToAbsent) {
+    return HistoryDBCompanion(
       id: id == null && nullToAbsent ? const Value.absent() : Value(id),
       base: base == null && nullToAbsent ? const Value.absent() : Value(base),
-      date: date == null && nullToAbsent ? const Value.absent() : Value(date),
-      user: user == null && nullToAbsent ? const Value.absent() : Value(user),
+      savedDate: savedDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(savedDate),
+      currencyDate: currencyDate == null && nullToAbsent
+          ? const Value.absent()
+          : Value(currencyDate),
+      rates:
+          rates == null && nullToAbsent ? const Value.absent() : Value(rates),
+      amount:
+          amount == null && nullToAbsent ? const Value.absent() : Value(amount),
+      userID:
+          userID == null && nullToAbsent ? const Value.absent() : Value(userID),
     );
   }
 
-  factory CurrencyDBData.fromJson(Map<String, dynamic> json,
+  factory HistoryDBData.fromJson(Map<String, dynamic> json,
       {ValueSerializer serializer}) {
     serializer ??= moorRuntimeOptions.defaultSerializer;
-    return CurrencyDBData(
+    return HistoryDBData(
       id: serializer.fromJson<int>(json['id']),
       base: serializer.fromJson<String>(json['base']),
-      date: serializer.fromJson<DateTime>(json['date']),
-      user: serializer.fromJson<int>(json['user']),
+      savedDate: serializer.fromJson<DateTime>(json['savedDate']),
+      currencyDate: serializer.fromJson<String>(json['currencyDate']),
+      rates: serializer.fromJson<List<Rate>>(json['rates']),
+      amount: serializer.fromJson<int>(json['amount']),
+      userID: serializer.fromJson<int>(json['userID']),
     );
   }
   @override
@@ -595,85 +346,135 @@ class CurrencyDBData extends DataClass implements Insertable<CurrencyDBData> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'base': serializer.toJson<String>(base),
-      'date': serializer.toJson<DateTime>(date),
-      'user': serializer.toJson<int>(user),
+      'savedDate': serializer.toJson<DateTime>(savedDate),
+      'currencyDate': serializer.toJson<String>(currencyDate),
+      'rates': serializer.toJson<List<Rate>>(rates),
+      'amount': serializer.toJson<int>(amount),
+      'userID': serializer.toJson<int>(userID),
     };
   }
 
-  CurrencyDBData copyWith({int id, String base, DateTime date, int user}) =>
-      CurrencyDBData(
+  HistoryDBData copyWith(
+          {int id,
+          String base,
+          DateTime savedDate,
+          String currencyDate,
+          List<Rate> rates,
+          int amount,
+          int userID}) =>
+      HistoryDBData(
         id: id ?? this.id,
         base: base ?? this.base,
-        date: date ?? this.date,
-        user: user ?? this.user,
+        savedDate: savedDate ?? this.savedDate,
+        currencyDate: currencyDate ?? this.currencyDate,
+        rates: rates ?? this.rates,
+        amount: amount ?? this.amount,
+        userID: userID ?? this.userID,
       );
   @override
   String toString() {
-    return (StringBuffer('CurrencyDBData(')
+    return (StringBuffer('HistoryDBData(')
           ..write('id: $id, ')
           ..write('base: $base, ')
-          ..write('date: $date, ')
-          ..write('user: $user')
+          ..write('savedDate: $savedDate, ')
+          ..write('currencyDate: $currencyDate, ')
+          ..write('rates: $rates, ')
+          ..write('amount: $amount, ')
+          ..write('userID: $userID')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => $mrjf($mrjc(
-      id.hashCode, $mrjc(base.hashCode, $mrjc(date.hashCode, user.hashCode))));
+      id.hashCode,
+      $mrjc(
+          base.hashCode,
+          $mrjc(
+              savedDate.hashCode,
+              $mrjc(
+                  currencyDate.hashCode,
+                  $mrjc(rates.hashCode,
+                      $mrjc(amount.hashCode, userID.hashCode)))))));
   @override
   bool operator ==(dynamic other) =>
       identical(this, other) ||
-      (other is CurrencyDBData &&
+      (other is HistoryDBData &&
           other.id == this.id &&
           other.base == this.base &&
-          other.date == this.date &&
-          other.user == this.user);
+          other.savedDate == this.savedDate &&
+          other.currencyDate == this.currencyDate &&
+          other.rates == this.rates &&
+          other.amount == this.amount &&
+          other.userID == this.userID);
 }
 
-class CurrencyDBCompanion extends UpdateCompanion<CurrencyDBData> {
+class HistoryDBCompanion extends UpdateCompanion<HistoryDBData> {
   final Value<int> id;
   final Value<String> base;
-  final Value<DateTime> date;
-  final Value<int> user;
-  const CurrencyDBCompanion({
+  final Value<DateTime> savedDate;
+  final Value<String> currencyDate;
+  final Value<List<Rate>> rates;
+  final Value<int> amount;
+  final Value<int> userID;
+  const HistoryDBCompanion({
     this.id = const Value.absent(),
     this.base = const Value.absent(),
-    this.date = const Value.absent(),
-    this.user = const Value.absent(),
+    this.savedDate = const Value.absent(),
+    this.currencyDate = const Value.absent(),
+    this.rates = const Value.absent(),
+    this.amount = const Value.absent(),
+    this.userID = const Value.absent(),
   });
-  CurrencyDBCompanion.insert({
+  HistoryDBCompanion.insert({
     this.id = const Value.absent(),
     @required String base,
-    @required DateTime date,
-    @required int user,
+    @required DateTime savedDate,
+    @required String currencyDate,
+    this.rates = const Value.absent(),
+    @required int amount,
+    @required int userID,
   })  : base = Value(base),
-        date = Value(date),
-        user = Value(user);
-  static Insertable<CurrencyDBData> custom({
+        savedDate = Value(savedDate),
+        currencyDate = Value(currencyDate),
+        amount = Value(amount),
+        userID = Value(userID);
+  static Insertable<HistoryDBData> custom({
     Expression<int> id,
     Expression<String> base,
-    Expression<DateTime> date,
-    Expression<int> user,
+    Expression<DateTime> savedDate,
+    Expression<String> currencyDate,
+    Expression<String> rates,
+    Expression<int> amount,
+    Expression<int> userID,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (base != null) 'base': base,
-      if (date != null) 'date': date,
-      if (user != null) 'user': user,
+      if (savedDate != null) 'saved_date': savedDate,
+      if (currencyDate != null) 'currency_date': currencyDate,
+      if (rates != null) 'rates': rates,
+      if (amount != null) 'amount': amount,
+      if (userID != null) 'user_i_d': userID,
     });
   }
 
-  CurrencyDBCompanion copyWith(
+  HistoryDBCompanion copyWith(
       {Value<int> id,
       Value<String> base,
-      Value<DateTime> date,
-      Value<int> user}) {
-    return CurrencyDBCompanion(
+      Value<DateTime> savedDate,
+      Value<String> currencyDate,
+      Value<List<Rate>> rates,
+      Value<int> amount,
+      Value<int> userID}) {
+    return HistoryDBCompanion(
       id: id ?? this.id,
       base: base ?? this.base,
-      date: date ?? this.date,
-      user: user ?? this.user,
+      savedDate: savedDate ?? this.savedDate,
+      currencyDate: currencyDate ?? this.currencyDate,
+      rates: rates ?? this.rates,
+      amount: amount ?? this.amount,
+      userID: userID ?? this.userID,
     );
   }
 
@@ -686,32 +487,45 @@ class CurrencyDBCompanion extends UpdateCompanion<CurrencyDBData> {
     if (base.present) {
       map['base'] = Variable<String>(base.value);
     }
-    if (date.present) {
-      map['date'] = Variable<DateTime>(date.value);
+    if (savedDate.present) {
+      map['saved_date'] = Variable<DateTime>(savedDate.value);
     }
-    if (user.present) {
-      map['user'] = Variable<int>(user.value);
+    if (currencyDate.present) {
+      map['currency_date'] = Variable<String>(currencyDate.value);
+    }
+    if (rates.present) {
+      final converter = $HistoryDBTable.$converter0;
+      map['rates'] = Variable<String>(converter.mapToSql(rates.value));
+    }
+    if (amount.present) {
+      map['amount'] = Variable<int>(amount.value);
+    }
+    if (userID.present) {
+      map['user_i_d'] = Variable<int>(userID.value);
     }
     return map;
   }
 
   @override
   String toString() {
-    return (StringBuffer('CurrencyDBCompanion(')
+    return (StringBuffer('HistoryDBCompanion(')
           ..write('id: $id, ')
           ..write('base: $base, ')
-          ..write('date: $date, ')
-          ..write('user: $user')
+          ..write('savedDate: $savedDate, ')
+          ..write('currencyDate: $currencyDate, ')
+          ..write('rates: $rates, ')
+          ..write('amount: $amount, ')
+          ..write('userID: $userID')
           ..write(')'))
         .toString();
   }
 }
 
-class $CurrencyDBTable extends CurrencyDB
-    with TableInfo<$CurrencyDBTable, CurrencyDBData> {
+class $HistoryDBTable extends HistoryDB
+    with TableInfo<$HistoryDBTable, HistoryDBData> {
   final GeneratedDatabase _db;
   final String _alias;
-  $CurrencyDBTable(this._db, [this._alias]);
+  $HistoryDBTable(this._db, [this._alias]);
   final VerificationMeta _idMeta = const VerificationMeta('id');
   GeneratedIntColumn _id;
   @override
@@ -733,40 +547,79 @@ class $CurrencyDBTable extends CurrencyDB
     );
   }
 
-  final VerificationMeta _dateMeta = const VerificationMeta('date');
-  GeneratedDateTimeColumn _date;
+  final VerificationMeta _savedDateMeta = const VerificationMeta('savedDate');
+  GeneratedDateTimeColumn _savedDate;
   @override
-  GeneratedDateTimeColumn get date => _date ??= _constructDate();
-  GeneratedDateTimeColumn _constructDate() {
+  GeneratedDateTimeColumn get savedDate => _savedDate ??= _constructSavedDate();
+  GeneratedDateTimeColumn _constructSavedDate() {
     return GeneratedDateTimeColumn(
-      'date',
+      'saved_date',
       $tableName,
       false,
     );
   }
 
-  final VerificationMeta _userMeta = const VerificationMeta('user');
-  GeneratedIntColumn _user;
+  final VerificationMeta _currencyDateMeta =
+      const VerificationMeta('currencyDate');
+  GeneratedTextColumn _currencyDate;
   @override
-  GeneratedIntColumn get user => _user ??= _constructUser();
-  GeneratedIntColumn _constructUser() {
+  GeneratedTextColumn get currencyDate =>
+      _currencyDate ??= _constructCurrencyDate();
+  GeneratedTextColumn _constructCurrencyDate() {
+    return GeneratedTextColumn(
+      'currency_date',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _ratesMeta = const VerificationMeta('rates');
+  GeneratedTextColumn _rates;
+  @override
+  GeneratedTextColumn get rates => _rates ??= _constructRates();
+  GeneratedTextColumn _constructRates() {
+    return GeneratedTextColumn(
+      'rates',
+      $tableName,
+      true,
+    );
+  }
+
+  final VerificationMeta _amountMeta = const VerificationMeta('amount');
+  GeneratedIntColumn _amount;
+  @override
+  GeneratedIntColumn get amount => _amount ??= _constructAmount();
+  GeneratedIntColumn _constructAmount() {
     return GeneratedIntColumn(
-      'user',
+      'amount',
+      $tableName,
+      false,
+    );
+  }
+
+  final VerificationMeta _userIDMeta = const VerificationMeta('userID');
+  GeneratedIntColumn _userID;
+  @override
+  GeneratedIntColumn get userID => _userID ??= _constructUserID();
+  GeneratedIntColumn _constructUserID() {
+    return GeneratedIntColumn(
+      'user_i_d',
       $tableName,
       false,
     );
   }
 
   @override
-  List<GeneratedColumn> get $columns => [id, base, date, user];
+  List<GeneratedColumn> get $columns =>
+      [id, base, savedDate, currencyDate, rates, amount, userID];
   @override
-  $CurrencyDBTable get asDslTable => this;
+  $HistoryDBTable get asDslTable => this;
   @override
-  String get $tableName => _alias ?? 'currency_d_b';
+  String get $tableName => _alias ?? 'history_d_b';
   @override
-  final String actualTableName = 'currency_d_b';
+  final String actualTableName = 'history_d_b';
   @override
-  VerificationContext validateIntegrity(Insertable<CurrencyDBData> instance,
+  VerificationContext validateIntegrity(Insertable<HistoryDBData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -779,17 +632,32 @@ class $CurrencyDBTable extends CurrencyDB
     } else if (isInserting) {
       context.missing(_baseMeta);
     }
-    if (data.containsKey('date')) {
-      context.handle(
-          _dateMeta, date.isAcceptableOrUnknown(data['date'], _dateMeta));
+    if (data.containsKey('saved_date')) {
+      context.handle(_savedDateMeta,
+          savedDate.isAcceptableOrUnknown(data['saved_date'], _savedDateMeta));
     } else if (isInserting) {
-      context.missing(_dateMeta);
+      context.missing(_savedDateMeta);
     }
-    if (data.containsKey('user')) {
+    if (data.containsKey('currency_date')) {
       context.handle(
-          _userMeta, user.isAcceptableOrUnknown(data['user'], _userMeta));
+          _currencyDateMeta,
+          currencyDate.isAcceptableOrUnknown(
+              data['currency_date'], _currencyDateMeta));
     } else if (isInserting) {
-      context.missing(_userMeta);
+      context.missing(_currencyDateMeta);
+    }
+    context.handle(_ratesMeta, const VerificationResult.success());
+    if (data.containsKey('amount')) {
+      context.handle(_amountMeta,
+          amount.isAcceptableOrUnknown(data['amount'], _amountMeta));
+    } else if (isInserting) {
+      context.missing(_amountMeta);
+    }
+    if (data.containsKey('user_i_d')) {
+      context.handle(_userIDMeta,
+          userID.isAcceptableOrUnknown(data['user_i_d'], _userIDMeta));
+    } else if (isInserting) {
+      context.missing(_userIDMeta);
     }
     return context;
   }
@@ -797,35 +665,31 @@ class $CurrencyDBTable extends CurrencyDB
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  CurrencyDBData map(Map<String, dynamic> data, {String tablePrefix}) {
+  HistoryDBData map(Map<String, dynamic> data, {String tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : null;
-    return CurrencyDBData.fromData(data, _db, prefix: effectivePrefix);
+    return HistoryDBData.fromData(data, _db, prefix: effectivePrefix);
   }
 
   @override
-  $CurrencyDBTable createAlias(String alias) {
-    return $CurrencyDBTable(_db, alias);
+  $HistoryDBTable createAlias(String alias) {
+    return $HistoryDBTable(_db, alias);
   }
+
+  static TypeConverter<List<Rate>, String> $converter0 = const RateConverter();
 }
 
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(SqlTypeSystem.defaultInstance, e);
   $UserDBTable _userDB;
   $UserDBTable get userDB => _userDB ??= $UserDBTable(this);
-  $RatesDBTable _ratesDB;
-  $RatesDBTable get ratesDB => _ratesDB ??= $RatesDBTable(this);
-  $CurrencyDBTable _currencyDB;
-  $CurrencyDBTable get currencyDB => _currencyDB ??= $CurrencyDBTable(this);
-  CurrencyDao _currencyDao;
-  CurrencyDao get currencyDao =>
-      _currencyDao ??= CurrencyDao(this as AppDatabase);
+  $HistoryDBTable _historyDB;
+  $HistoryDBTable get historyDB => _historyDB ??= $HistoryDBTable(this);
+  HistoryDao _historyDao;
+  HistoryDao get historyDao => _historyDao ??= HistoryDao(this as AppDatabase);
   UserDao _userDao;
   UserDao get userDao => _userDao ??= UserDao(this as AppDatabase);
-  RatesDao _ratesDao;
-  RatesDao get ratesDao => _ratesDao ??= RatesDao(this as AppDatabase);
   @override
   Iterable<TableInfo> get allTables => allSchemaEntities.whereType<TableInfo>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [userDB, ratesDB, currencyDB];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [userDB, historyDB];
 }

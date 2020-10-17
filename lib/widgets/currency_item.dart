@@ -1,6 +1,7 @@
 import 'package:currency_converter/models/serialized/rate.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class CurrencyItem extends StatefulWidget {
   final Rate rate;
 
@@ -28,7 +29,7 @@ class _CurrencyItemState extends State<CurrencyItem> {
         child: ListTile(
           // trailing: Text(teste.toString()),
           trailing: Text(rate.roundToDouble().toString()),
-          title: Text(widget.rate.key),
+          title: Text(widget.rate.currency),
         ),
       ),
     );

@@ -1,11 +1,11 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'currencyDao.dart';
+part of 'historyDao.dart';
 
 // **************************************************************************
 // DaoGenerator
 // **************************************************************************
 
-mixin _$CurrencyDaoMixin on DatabaseAccessor<AppDatabase> {
-  $CurrencyDBTable get currencyDB => attachedDatabase.currencyDB;
+mixin _$HistoryDaoMixin on DatabaseAccessor<AppDatabase> {
+  $HistoryDBTable get historyDB => attachedDatabase.historyDB;
 }

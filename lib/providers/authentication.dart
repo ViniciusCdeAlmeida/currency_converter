@@ -12,6 +12,10 @@ class Authentication with ChangeNotifier {
     return _userAuth;
   }
 
+  User get actualUser {
+    return _user;
+  }
+
   Future<void> _saveUser(User user) async {
     try {
       await db.userDao.insertUser(user);

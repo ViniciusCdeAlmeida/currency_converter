@@ -5,11 +5,11 @@ part 'rate.g.dart';
 
 @JsonSerializable()
 class Rate with ChangeNotifier {
-  String key;
+  String currency;
   double value;
 
   Rate({
-    this.key,
+    this.currency,
     this.value,
   });
 

@@ -1,6 +1,9 @@
-import 'package:currency_converter/models/database/daos/currencyDao.dart';
-import 'package:currency_converter/models/database/daos/ratesDao.dart';
+import 'package:currency_converter/models/converter/rateConverter.dart';
+
+import 'package:currency_converter/models/database/daos/historyDao.dart';
 import 'package:currency_converter/models/database/daos/userDao.dart';
+
+import 'package:currency_converter/models/serialized/rate.dart';
 
 import 'package:moor_flutter/moor_flutter.dart';
 
@@ -12,30 +15,24 @@ class UserDB extends Table {
   TextColumn get password => text()();
 }
 
-class RatesDB extends Table {
-  IntColumn get id => integer().autoIncrement()();
-  TextColumn get country => text()();
-  RealColumn get rate => real()();
-  IntColumn get currency => integer()();
-}
-
-class CurrencyDB extends Table {
+class HistoryDB extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get base => text()();
-  DateTimeColumn get date => dateTime()();
-  IntColumn get user => integer()();
+  DateTimeColumn get savedDate => dateTime()();
+  TextColumn get currencyDate => text()();
+  TextColumn get rates => text().map(const RateConverter()).nullable()();
+  IntColumn get amount => integer()();
+  IntColumn get userID => integer()();
 }
 
 @UseMoor(
   tables: [
     UserDB,
-    RatesDB,
-    CurrencyDB,
+    HistoryDB,
   ],
   daos: [
-    CurrencyDao,
+    HistoryDao,
     UserDao,
-    RatesDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -44,21 +41,22 @@ class AppDatabase extends _$AppDatabase {
           (FlutterQueryExecutor.inDatabaseFolder(
             path: 'db.sqlite',
             // Good for debugging - prints SQL in the console
-            // logStatements: true,
+            logStatements: true,
           )),
         );
 
-  // Bump this when changing tables and columns.
-  // Migrations will be covered in the next part.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 5;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onCreate: (Migrator m) {
           return m.createAll();
         },
-        onUpgrade: (m, from, to) {},
+        onUpgrade: (m, from, to) {
+          // return m.createTable(historyDB);
+          return m.addColumn(historyDB, historyDB.userID);
+        },
       );
 
   void deleteTable(TableInfo table) => delete(table).go();

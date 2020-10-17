@@ -2,7 +2,7 @@ import 'package:currency_converter/models/serialized/rate.dart';
 
 Rate helperRate(Map rate) {
   return Rate(
-    key: rate['key'],
+    currency: rate['currency'],
     value: rate['value'],
   );
 }

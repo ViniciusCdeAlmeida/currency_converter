@@ -1,6 +1,9 @@
 import 'package:currency_converter/helpers/helper_currency.dart';
+import 'package:currency_converter/helpers/helper_history.dart';
+import 'package:currency_converter/main.dart';
 import 'package:currency_converter/models/serialized/currency.dart';
-import 'package:currency_converter/models/serialized/rate.dart';
+import 'package:currency_converter/models/serialized/history.dart';
+import 'package:currency_converter/models/serialized/user.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'dart:async';
@@ -8,9 +11,14 @@ import 'dart:async';
 class Currencies with ChangeNotifier {
   Currency _currency;
   String _amount;
+  List<History> _history = [];
 
   Currency get getCurrencies {
     return _currency;
+  }
+
+  List<History> get userHistory {
+    return _history;
   }
 
   String get getAmount {
@@ -41,7 +49,37 @@ class Currencies with ChangeNotifier {
     }
   }
 
+  Future<void> _getUserHistory(int userId) async {
+    try {
+      _history = helperUserHistory(await db.historyDao.getUserHisory(userId));
+
+      notifyListeners();
+    } catch (e) {}
+  }
+
+  Future<void> _saveCurrency(User user) async {
+    History hist = new History(
+      amount: int.parse(_amount == null || _amount == "" ? "1" : _amount),
+      base: _currency.base,
+      currencyDate: _currency.date,
+      savedDate: DateTime.now(),
+      rates: _currency.rates,
+      userID: user.id,
+    );
+    try {
+      await db.historyDao.insertHistory(hist);
+    } catch (e) {}
+  }
+
   Future<void> getCurrency(String currency) async {
     await _getCurrency(currency);
+  }
+
+  Future<void> getUserHistory(int userId) async {
+    await _getUserHistory(userId);
+  }
+
+  Future<void> saveCurrency(User user) async {
+    await _saveCurrency(user);
   }
 }

@@ -1,5 +1,4 @@
 import 'package:currency_converter/models/serialized/rate.dart';
-import 'package:currency_converter/models/serialized/rates.dart';
 import 'package:currency_converter/models/serialized/user.dart';
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';

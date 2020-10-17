@@ -1,7 +1,10 @@
 import 'package:currency_converter/custom/appDrawer.dart';
+import 'package:currency_converter/models/serialized/user.dart';
+import 'package:currency_converter/providers/authentication.dart';
 import 'package:currency_converter/providers/currencies.dart';
 import 'package:currency_converter/widgets/currency_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class CurrencyScreen extends StatefulWidget {
@@ -11,7 +14,6 @@ class CurrencyScreen extends StatefulWidget {
 }
 
 class _CurrencyScreenState extends State<CurrencyScreen> {
-  final _amountController = TextEditingController();
   List<String> _currency = ['USD', 'EUR', 'BRL'];
   String _selectedCurrency;
 
@@ -22,6 +24,15 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
       await Provider.of<Currencies>(context, listen: false)
           .getCurrency(currency);
     } catch (e) {}
+  }
+
+  Future<void> _saveRates() async {
+    User _user = Provider.of<Authentication>(context, listen: false).actualUser;
+    try {
+      await Provider.of<Currencies>(context, listen: false).saveCurrency(_user);
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -94,15 +105,17 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
                         _currentCurrency.setAmount(value);
                       });
                     },
-                    keyboardType:
-                        TextInputType.numberWithOptions(decimal: true),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0, right: 8.0),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    _saveRates();
+                  },
                   minWidth: deviceSize.width / 10,
                   color: Color(0xFFFFC200),
                   child: Icon(Icons.save),
@@ -110,39 +123,36 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
               ),
             ],
           ),
-          _currentCurrency.getCurrencies != null
-              ? Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                        fit: FlexFit.loose,
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 30.0),
-                          child: Consumer<Currencies>(
-                            builder: (ctx, currenciesData, _) =>
-                                ListView.builder(
-                              shrinkWrap: true,
-                              itemBuilder: (_, idx) => Column(
-                                children: [
-                                  CurrencyItem(
-                                    currenciesData.getCurrencies.rates[idx],
-                                    currenciesData.getAmount,
-                                  ),
-                                  Divider(),
-                                ],
+          if (_currentCurrency.getCurrencies != null)
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    fit: FlexFit.loose,
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Consumer<Currencies>(
+                        builder: (ctx, currenciesData, _) => ListView.builder(
+                          shrinkWrap: true,
+                          itemBuilder: (_, idx) => Column(
+                            children: [
+                              CurrencyItem(
+                                currenciesData.getCurrencies.rates[idx],
+                                currenciesData.getAmount,
                               ),
-                              itemCount:
-                                  currenciesData.getCurrencies.rates.length,
-                            ),
+                              Divider(),
+                            ],
                           ),
+                          itemCount: currenciesData.getCurrencies.rates.length,
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                )
-              : Container(),
+                ],
+              ),
+            ),
         ],
       ),
     );

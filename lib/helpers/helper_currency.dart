@@ -10,7 +10,7 @@ Currency helperCurrency(dynamic currency) {
         .entries
         .map(
           (e) => Rate(
-            key: e.key,
+            currency: e.key,
             value: e.value,
           ),
         )

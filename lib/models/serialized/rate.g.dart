@@ -8,12 +8,12 @@ part of 'rate.dart';
 
 Rate _$RateFromJson(Map<String, dynamic> json) {
   return Rate(
-    key: json['key'] as String,
+    currency: json['currency'] as String,
     value: (json['value'] as num)?.toDouble(),
   );
 }
 
 Map<String, dynamic> _$RateToJson(Rate instance) => <String, dynamic>{
-      'key': instance.key,
+      'currency': instance.currency,
       'value': instance.value,
     };
