@@ -1,16 +1,15 @@
-# currency_converter
+# 💲 Currency Converter 
 
-A new Flutter project.
+A Currency Converter app which uses moor packages for Data Persistence.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## 💻 Install
+**Note**: Make sure your [Flutter](https://flutter.dev) environment is setup.
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+In the command terminal, run the following commands:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+    $ git clone https://github.com/ViniciusCdeAlmeida/currency_converter.git task_management
+    $ cd currency_converter/
+    $ flutter packages get
+    $ flutter run
