@@ -2,7 +2,7 @@
 
 A Currency Converter app which uses moor packages for Data Persistence.
 
-# 🔑 Singup is required to access the app. 
+## 🔑 Singup is required to access the app. 
 
 ## 💻 Install
 **Note**: Make sure your [Flutter](https://flutter.dev) environment is setup.
