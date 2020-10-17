@@ -1,9 +1,7 @@
 # 💲 Currency Converter 
 
 A Currency Converter app which uses moor packages for Data Persistence.
-
-
-## 🔑 Singup is required to access the app. 
+ 
 
 
 ## 💻 Install
@@ -20,3 +18,5 @@ In the command terminal, run the following commands:
 ### 📱 APK
 
     https://drive.google.com/file/d/19ECeUwWaDNbfk7V2X9-P1DCdiaXggnMh/view?usp=sharing
+    
+### 🔑 Singup in the app is required.
