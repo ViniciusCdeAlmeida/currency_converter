@@ -1,5 +1,10 @@
 import 'package:currency_converter/custom/customLine.dart';
+import 'package:currency_converter/main.dart';
+import 'package:currency_converter/providers/authentication.dart';
+import 'package:currency_converter/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:moor_db_viewer/moor_db_viewer.dart';
+import 'package:provider/provider.dart';
 
 class LoginItem extends StatefulWidget {
   LoginItem({Key key}) : super(key: key);
@@ -16,6 +21,36 @@ class _LoginItemState extends State<LoginItem> {
   };
 
   final _passwordController = TextEditingController();
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+
+    try {
+      await Provider.of<Authentication>(context, listen: false).getUser(
+        _loginData['userName'],
+        _loginData['password'],
+      );
+    } catch (error) {
+      await showDialog<Null>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Error.'),
+          content: const Text('Error.'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Text('OK'),
+            )
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +92,7 @@ class _LoginItemState extends State<LoginItem> {
                   text: "LOG IN",
                   icon: null,
                   color: Color(0xFFFFD185),
+                  func: _submit,
                 ),
               ),
               Padding(
@@ -66,6 +102,8 @@ class _LoginItemState extends State<LoginItem> {
                   text: "SIGN UP",
                   icon: null,
                   color: Color(0xFFFFA185),
+                  context: context,
+                  func: _signupScreen,
                 ),
               ),
               Padding(
@@ -79,6 +117,8 @@ class _LoginItemState extends State<LoginItem> {
                   text: "LOGIN WITH FACEBOOK",
                   icon: Icons.place,
                   color: Color(0xFF3C4858),
+                  func: _dbScreen,
+                  context: context,
                 ),
               ),
               Padding(
@@ -122,6 +162,17 @@ Widget customLine(Size deviceSize) {
   );
 }
 
+void _signupScreen(BuildContext context) {
+  Navigator.of(context).pushNamed(
+    SignupScreen.routeName,
+  );
+}
+
+void _dbScreen(BuildContext context) {
+  Navigator.of(context)
+      .push(MaterialPageRoute(builder: (context) => MoorDbViewer(db)));
+}
+
 Widget loading() {
   return CircularProgressIndicator();
 }
@@ -131,9 +182,13 @@ Widget showButton({
   String text,
   IconData icon,
   Color color,
+  BuildContext context,
+  Function func,
 }) {
   return MaterialButton(
-    onPressed: () {},
+    onPressed: () {
+      context != null ? func(context) : func();
+    },
     minWidth: deviceSize.width,
     child: Stack(
       children: [

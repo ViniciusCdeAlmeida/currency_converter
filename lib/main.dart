@@ -1,11 +1,16 @@
+import 'package:currency_converter/models/database/databaseMoor.dart';
 import 'package:currency_converter/providers/authentication.dart';
 import 'package:currency_converter/providers/currencies.dart';
 import 'package:currency_converter/screens/currency_screen.dart';
 import 'package:currency_converter/screens/login_screen.dart';
+import 'package:currency_converter/screens/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+AppDatabase db;
+
 void main() {
+  db = AppDatabase();
   runApp(CurrencyConverter());
 }
 
@@ -35,6 +40,7 @@ class CurrencyConverter extends StatelessWidget {
           routes: {
             CurrencyScreen.routeName: (ctx) => CurrencyScreen(),
             LoginScreen.routeName: (ctx) => LoginScreen(),
+            SignupScreen.routeName: (ctx) => SignupScreen(),
           },
         ),
       ),
