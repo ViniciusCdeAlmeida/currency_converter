@@ -16,4 +16,4 @@ In the command terminal, run the following commands:
 
 ### 📱 APK
 
-    $ https://drive.google.com/file/d/19ECeUwWaDNbfk7V2X9-P1DCdiaXggnMh/view?usp=sharing
+    https://drive.google.com/file/d/19ECeUwWaDNbfk7V2X9-P1DCdiaXggnMh/view?usp=sharing
